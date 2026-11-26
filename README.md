@@ -1,1 +1,1 @@
-# fyers-dashboard
+Fyers Nifty dashboard — static index.html plus Vercel serverless functions in api/. The engine POSTs state to /api/push (Bearer PUSH_TOKEN env var); the page polls /api/state. Deploy on Vercel; set PUSH_TOKEN in project env vars.

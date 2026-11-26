@@ -1,0 +1,1 @@
+{ "name": "fyers-nifty-paper-desk", "private": true, "type": "module", "dependencies": { "@vercel/functions": "^3.1.0" } }

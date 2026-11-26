@@ -1,0 +1,172 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paper Desk · Nifty 50</title>
+<style>
+:root{--bg:#0d1117;--card:#151b23;--line:#232b36;--txt:#e6edf3;--mut:#8b949e;--dim:#5b6470;--acc:#8ab4f8;--up:#3fb950;--dn:#f85149;--sl:#e3b341}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif}
+.num{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 48px}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--line);margin-bottom:28px;gap:12px;flex-wrap:wrap}
+.title{font-weight:600;letter-spacing:.2px}.title small{color:var(--dim);font-weight:400;margin-left:8px}
+.status{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13px}
+.dot.stale{background:var(--dn);box-shadow:0 0 0 4px rgba(248,81,73,.18)}.status.stale{color:var(--dn);font-weight:600}.banner.stale{border-color:var(--dn);color:var(--txt);background:rgba(248,81,73,.08)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim)}.dot.on{background:var(--acc);box-shadow:0 0 0 4px rgba(138,180,248,.15)}
+.lbl{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.stat .v{font-size:24px;font-weight:600;margin-top:6px}.stat .s{color:var(--mut);font-size:13px;margin-top:2px}
+.strip{display:flex;gap:28px;flex-wrap:wrap;color:var(--mut);font-size:13px;padding:4px 2px 28px}.strip b{color:var(--txt);font-weight:500;margin:0 6px}
+.up{color:var(--up)}.dn{color:var(--dn)}.mut{color:var(--mut)}
+h3{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.8px;font-weight:500;margin:36px 0 12px}
+.pos{padding:22px 24px;margin-bottom:16px}
+.pos-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.sym{font-size:18px;font-weight:600}.pill{display:inline-block;font-size:11px;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+.pnl{text-align:right}.pnl .v{font-size:26px;font-weight:600}
+.grid4{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:12px 40px;margin-top:18px}
+.grid4 .v{font-size:15px}
+.ladder{position:relative;height:118px;margin:22px 8px 4px}
+.ladder .track{top:52px;height:6px;border-radius:3px}.ladder .slfill{position:absolute;top:52px;height:6px;background:rgba(227,179,65,.35);border-radius:3px}
+.lm{position:absolute;transform:translateX(-50%);white-space:nowrap;font-size:11px;color:var(--mut);text-align:center;line-height:1.3}
+.lm .stem{position:absolute;left:50%;width:1px;background:var(--dim)}
+.lm.sl{color:var(--sl);font-weight:600;font-size:12px}.lm.sl .stem{background:var(--sl);width:3px;margin-left:-1px}
+.lm.ltp{color:var(--txt)}.lm.ltp .stem{background:var(--txt);width:2px}
+.lm.ms{color:var(--dim)}.lm.next{color:var(--mut);font-style:italic}
+.pctpair{display:flex;gap:18px;justify-content:flex-end;margin-top:4px;font-size:13px}.pctpair span{color:var(--mut)}.pctpair b{font-weight:600}
+.mini{display:flex;gap:16px;margin-top:4px;font-size:13px;color:var(--mut)}.mini b{font-weight:600}
+.rules{font-size:13px;color:var(--mut);line-height:1.7}.rules b{color:var(--txt);font-weight:500}
+.track{position:absolute;top:22px;left:0;right:0;height:4px;background:var(--line);border-radius:2px}
+.fill{position:absolute;top:22px;height:4px;border-radius:2px}
+.mk{position:absolute;top:0;transform:translateX(-50%);text-align:center;font-size:11px;color:var(--mut);white-space:nowrap}
+.mk i{display:block;width:2px;height:14px;background:var(--dim);margin:0 auto 0}
+.mk.top{top:0}.mk.top i{margin-top:2px}.mk.bot{top:30px}.mk.bot i{height:10px;margin-bottom:2px}
+.ladder .mk.top{top:0}.mk.sl i{background:var(--txt)}.mk.ltp i{background:var(--acc);width:3px}
+.stage{margin-top:14px;font-size:13px;color:var(--mut)}.stage b{color:var(--txt);font-weight:500}
+.why{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}.why b{color:var(--txt);font-weight:500}
+.empty{color:var(--dim);padding:28px;text-align:center}
+.tl{list-style:none;margin:0;padding:0}.tl li{display:grid;grid-template-columns:60px 120px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.tl .t{color:var(--dim)}.tl .k{color:var(--txt);font-weight:500;font-size:12px}.tl .d{color:var(--mut)}
+.tl li.skip .k,.tl li.skip .d{color:var(--dim)}
+.toggle{float:right;font-size:12px;color:var(--mut);cursor:pointer;user-select:none;text-transform:none;letter-spacing:0}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--dim);font-weight:500;font-size:12px}
+td.r,th.r{text-align:right}
+details{margin-top:40px;border-top:1px solid var(--line);padding-top:16px}summary{cursor:pointer;color:var(--mut);font-size:13px}
+details .card{margin-top:14px;overflow-x:auto}.wrapcell{white-space:normal;color:var(--mut);min-width:240px}
+.banner{display:none;padding:14px 18px;border:1px solid var(--line);border-radius:10px;color:var(--mut);margin-bottom:20px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.grid4{grid-template-columns:repeat(2,auto)}.pnl{text-align:left}.tl li{grid-template-columns:56px 1fr}.tl .d{grid-column:1/-1}.stat .v{font-size:20px}}
+</style></head><body><div class="wrap">
+<header><div class="title">Paper Desk<small>Nifty 50 options · paper default · live optional</small></div>
+<div class="status"><span class="dot" id="dot"></span><span id="st">Connecting</span><span class="num" id="upd"></span></div></header>
+<div class="banner" id="banner"></div>
+<section class="stats">
+ <div class="card stat"><div class="lbl">Equity</div><div class="v num" id="eq">–</div><div class="s num" id="eqs">vs ₹30,000</div></div>
+ <div class="card stat"><div class="lbl">Today's P&amp;L</div><div class="v num" id="pl">–</div><div class="mini num" id="plp"></div><div class="s num" id="pls">realized · unrealized</div></div>
+ <div class="card stat"><div class="lbl">Open positions</div><div class="v num" id="op">–</div><div class="s" id="ops">max 1 per index</div></div>
+ <div class="card stat"><div class="lbl">Per-trade cap</div><div class="v num" id="cap">₹12K</div><div class="s num" id="caps">max risk ₹3.6K (−30%)</div></div>
+</section>
+<div class="strip num" id="strip"></div>
+<h3>Open positions</h3><div id="pos"></div>
+<h3>Today <span class="toggle" id="tg">Show skips</span></h3><div class="card" style="padding:4px 20px"><ul class="tl" id="tl"></ul></div>
+<div id="closedWrap" style="display:none"><h3>Closed trades</h3><div class="card" style="padding:6px 16px;overflow-x:auto" id="closed"></div></div>
+<h3>Capital curve</h3><div class="card" id="curve"></div>
+<h3>Trade history</h3>
+<div class="stats" id="histStats" style="margin-bottom:16px"></div>
+<div class="card" style="padding:6px 16px;overflow-x:auto;margin-bottom:16px" id="histDays"></div>
+<div class="card" style="padding:6px 16px;overflow-x:auto" id="hist"></div>
+<details id="det"><summary>Details: strategy scores, news, raw event log</summary><div id="details"></div></details>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const n=(x,d=2)=>x==null||isNaN(x)?'–':Number(x).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const rs=(x,d=0)=>x==null||isNaN(x)?'–':(x<0?'−':'')+'₹'+n(Math.abs(x),d);
+const sg=(x,d=0)=>x==null||isNaN(x)?'–':(x>0?'+':x<0?'−':'')+'₹'+n(Math.abs(x),d);
+const pc=x=>x==null||isNaN(x)?'–':(x>0?'+':'')+n(x,2)+'%';
+const cl=x=>x>0?'up':x<0?'dn':'';const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let showSkips=false,last=null;$('tg').onclick=()=>{showSkips=!showSkips;$('tg').textContent=showSkips?'Hide skips':'Show skips';last&&render(last)};
+const gp=(v,e)=>(v/e-1)*100, sp=x=>(x>=0?'+':'−')+n(Math.abs(x),1)+'%';
+function stageLabel(p){if(p.stage==='INITIAL')return 'Initial (−30%)';return p.sl<=+(p.entry+0.05).toFixed(2)?'Break-even':'Trailing (peak gain − 15 pts)'}
+function nextStep(p){const pk=gp(p.peak,p.entry);if(p.stage==='INITIAL')return {at:15,sl:0,txt:`next: at +15% (₹${n(p.entry*1.15)}) the SL moves to break-even (₹${n(p.entry)})`};
+ const z=Math.floor(pk/5)*5+5;return {at:z,sl:z-15,txt:`next: at +${z}% (₹${n(p.entry*(1+z/100))}) the SL moves to +${z-15}% (₹${n(p.entry*(1+(z-15)/100))})`}}
+function why(p){const r=p.reason||'';let first=r.split('. ')[0].replace(/ fired:/,':');if(first.length>150)first=first.slice(0,147)+'…';return `<b>${esc(p.strategy)}</b>, confidence ${p.confidence}. ${esc(first.replace(p.strategy+':','').trim())}.`}
+function ladder(p){const e=p.entry,G=v=>gp(v,e),nx=nextStep(p);
+ const vals=[-30,0,15,G(p.sl),G(p.ltp),G(p.peak),nx.at],lo=Math.min(...vals),hi=Math.max(...vals),pad=(hi-lo)*.05,a=lo-pad,b=hi+pad;
+ const xv=g=>(g-a)/(b-a)*100,x=g=>xv(g).toFixed(2)+'%';
+ const W=Math.max(280,($('pos').clientWidth||900)-64),px=c=>c*6.6/W*100;  // approx label width in %
+ const rows={};const ctr=(xp,half)=>Math.min(100-half,Math.max(half,xp));
+ const place=(names,g,txt)=>{const half=px(txt.length)/2+1,xp=ctr(xv(g),half);for(const r of names){rows[r]=rows[r]||[];if(rows[r].every(([l,h])=>xp+half<l||xp-half>h)){rows[r].push([xp-half,xp+half]);return [r,xp]}}return null};
+ const Y={a1:0,a2:18,a3:34,b1:66,b2:82,b3:98},TR=52;let out='';
+ const mk=(cls,g,txt,rowsPref)=>{const pl=place(rowsPref,g,txt);const r=pl&&pl[0];const above=!r||r[0]==='a';const y=r?Y[r]:null;
+  const stemTop=y==null?TR-6:above?y+15:TR+6,stemH=y==null?18:above?TR-stemTop:(y-TR-4);
+  if(r)out+=`<div class="lm ${cls}" style="left:${pl[1].toFixed(2)}%;top:${y}px">${txt}</div>`;
+  out+=`<div class="lm ${cls}" style="left:${x(g)};top:${stemTop}px;height:${Math.max(4,stemH)}px"><span class="stem" style="top:0;height:100%"></span></div>`};
+ // SL first so it always gets the top row
+ mk('sl',G(p.sl),`SL ₹${n(p.sl)} (${sp(G(p.sl))}) · ${stageLabel(p)}`,['a1','a2']);
+ mk('ltp',G(p.ltp),`LTP ₹${n(p.ltp)} (${sp(G(p.ltp))})`,['a2','a3','a1']);
+ if(Math.abs(p.peak-p.ltp)>=0.01)mk('',G(p.peak),`Peak ₹${n(p.peak)} (${sp(G(p.peak))})`,['a3','a2','a1']);
+ mk('ms',-30,'−30% initial',['b1','b2','b3']);mk('ms',0,`Entry ₹${n(e)}`,['b1','b2','b3']);
+ mk('ms',15,'+15% → break-even',['b1','b2','b3']);
+ if(p.stage!=='INITIAL')mk('next',nx.at,`+${nx.at}% → SL +${nx.sl}%`,['b1','b2','b3']);
+ const f1=Math.min(G(p.sl),G(p.ltp)),f2=Math.max(G(p.sl),G(p.ltp));
+ return `<div class="ladder"><div class="track"></div><div class="slfill" style="left:${x(f1)};width:calc(${x(f2)} - ${x(f1)})"></div>${out}</div>`}
+function curve(pts){if(!pts||pts.length<2)return '<div class="empty">Not enough data yet</div>';const ys=pts.map(p=>p.equity),lo=Math.min(...ys,30000),hi=Math.max(...ys,30000),w=1000,h=140;
+ const X=i=>(i/(pts.length-1)*w).toFixed(1),Y=v=>(h-8-(v-lo)/((hi-lo)||1)*(h-16)).toFixed(1);const d=pts.map((p,i)=>`${i?'L':'M'}${X(i)},${Y(p.equity)}`).join('');
+ const lastv=ys[ys.length-1];return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="width:100%;height:${h}px;display:block"><line x1="0" x2="${w}" y1="${Y(30000)}" y2="${Y(30000)}" stroke="#2d3540" stroke-dasharray="4 6"/><path d="${d}" fill="none" stroke="var(--${lastv>=30000?'up':'dn'})" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+ <div class="mut num" style="display:flex;justify-content:space-between;font-size:12px;margin-top:6px"><span>${esc(pts[0].t.slice(11,16))}</span><span>low ${rs(Math.min(...ys))} · high ${rs(Math.max(...ys))}</span><span>${esc(pts[pts.length-1].t.slice(11,16))} IST</span></div>`}
+function evText(e){if(e.type==='ENTRY')return `Bought ${e.qty} × ${esc(e.symbol.replace('NSE:',''))} @ ${n(e.price)} · SL ${n(e.sl_new)}`;
+ if(e.type==='SL_MOVE')return `${esc(e.symbol.replace('NSE:',''))} SL ${n(e.sl_old)} → ${n(e.sl_new)} · LTP ${n(e.price)}`;
+ if(e.type==='EXIT')return `Sold ${e.qty} × ${esc(e.symbol.replace('NSE:',''))} @ ${n(e.price)} · <span class="${cl(e.pnl)}">${sg(e.pnl)}</span> · ${esc((e.reason||'').split('.')[0])}`;
+ return esc(e.reason||'')}
+const STALE=60;
+function fmtAge(a){a=Math.max(0,Math.round(a));return a<120?a+'s':a<7200?Math.floor(a/60)+'m '+(a%60)+'s':Math.floor(a/3600)+'h '+Math.floor(a%3600/60)+'m'}
+function paintStatus(){if(!last)return;const s=last.state||{},st=s.status;
+ const age=last.received_at?(Date.now()-new Date(last.received_at))/1000:null;
+ const stale=st==='live'&&(age==null||age>STALE);const live=st==='live'&&!stale;
+ $('dot').className='dot'+(live?' on':stale?' stale':'');$('st').parentElement.className='status'+(stale?' stale':'');
+ $('st').textContent=stale?`Stale: last update ${age==null?'unknown':fmtAge(age)+' ago'}`:st==='live'?'Live':st==='market_closed'?'Market closed':st==='token_invalid'?'Fyers login expired':st==='waiting_for_login'?'Waiting for Fyers login':'Waiting for engine';
+ $('upd').textContent=s.last_update_ist?'· '+s.last_update_ist.slice(11)+' IST':'';
+ const bn=$('banner');bn.className='banner'+(stale?' stale':'');
+ if(stale){bn.style.display='block';bn.textContent=`Stale data: the engine's last update reached the dashboard ${age==null?'at an unknown time':fmtAge(age)+' ago'} (at ${(s.last_update_ist||'').slice(11)} IST). Prices and P&L below are not current.`}
+ else if(['waiting_for_login','waiting_for_engine','token_invalid'].includes(st)){bn.style.display='block';bn.textContent=st==='token_invalid'?'The Fyers access token has expired. Log in to Fyers again to resume.':'Waiting for Fyers login. Live data starts as soon as the access token is available.'}
+ else bn.style.display='none'}
+setInterval(paintStatus,1000);
+function render(j){last=j;const s=j.state||{},ev=j.events||[];
+ paintStatus();
+ const base=s.capital_start||30000,eq=s.equity,day=(s.realized_pnl||0)-(s.charges||0)+(s.unrealized_pnl||0);
+ $('eq').innerHTML=`${rs(eq)} <span class="${cl(eq-base)}" style="font-size:15px">${eq!=null?pc((eq/base-1)*100):''}</span>`;$('eqs').innerHTML=(eq!=null?`<span class="${cl(eq-base)}">${sg(eq-base)}</span> vs ₹30,000 start`:'vs ₹30,000')+` · <b>${esc(s.mode||'PAPER')}</b>`;
+ $('pl').innerHTML=`<span class="${cl(day)}">${sg(day)}</span>`;$('pls').innerHTML=`realized <span class="${cl(s.realized_pnl)}">${sg((s.realized_pnl||0)-(s.charges||0))}</span> · open <span class="${cl(s.unrealized_pnl)}">${sg(s.unrealized_pnl||0)}</span>`;
+ const pos=Object.values(s.positions||{});const acct=eq!=null?(eq/base-1)*100:null;
+ const dep=pos.reduce((t,p)=>t+p.entry*p.qty,0),opn=pos.reduce((t,p)=>t+(p.ltp-p.entry)*p.qty,0),tp=dep?opn/dep*100:null;$('op').textContent=pos.length;$('plp').innerHTML=`<span>Trade <b class="${cl(tp)}">${tp==null?'–':pc(tp)}</b></span><span>Account <b class="${cl(acct)}">${pc(acct)}</b></span>`;$('ops').textContent=`cash free ${rs(s.available_capital)}`;
+ const cap=s.per_trade_cap||12000;$('cap').textContent='₹'+n(cap/1000,0)+'K';$('caps').textContent=`max risk ₹${n(cap*0.3/1000,1)}K (−30% SL)`;
+ const I=s.indices||{},ix=(k,lab)=>I[k]?`<span>${lab}<b>${n(I[k].ltp)}</b><span class="${cl(I[k].chgp)}">${pc(I[k].chgp)}</span></span>`:'';
+ const vx=(I.NIFTY||{});$('strip').innerHTML=ix('NIFTY','Nifty 50')+(vx.vix!=null?`<span>India VIX<b>${n(vx.vix)}</b><span class="mut">${pc(vx.vix_chgp)}</span></span>`:'');
+ $('pos').innerHTML=pos.length?pos.map(p=>{const u=(p.ltp-p.entry)*p.qty,up=(p.ltp/p.entry-1)*100;return `<div class="card pos">
+  <div class="pos-top"><div><div class="sym num">${esc(p.symbol.replace('NSE:',''))}<span class="pill">${p.side}</span><span class="pill">${esc(p.index)}</span></div><div class="mut" style="font-size:13px;margin-top:2px">Expiry ${esc(p.expiry)} · since ${esc(p.entry_ts.slice(11,16))} IST</div></div>
+  <div class="pnl"><div class="v num ${cl(u)}">${sg(u)}</div><div class="pctpair num"><span>Trade <b class="${cl(up)}">${pc(up)}</b> on ${rs(p.entry*p.qty)}</span><span>Account <b class="${cl(acct)}">${pc(acct)}</b></span></div></div></div>
+  <div class="grid4 num"><div><div class="lbl">Qty</div><div class="v">${p.qty} <span class="mut">(${p.lots} lot${p.lots>1?'s':''})</span></div></div><div><div class="lbl">Entry</div><div class="v">${n(p.entry)}</div></div><div><div class="lbl">LTP</div><div class="v">${n(p.ltp)}</div></div><div><div class="lbl">Stop-loss</div><div class="v">${n(p.sl)}</div></div></div>
+  ${ladder(p)}<div class="stage">Stop-loss <b style="color:var(--sl)">₹${n(p.sl)} (${sp(gp(p.sl,p.entry))})</b> · stage <b>${stageLabel(p)}</b> · peak ${n(p.peak)} (${sp(gp(p.peak,p.entry))}) · ${nextStep(p).txt}</div>
+  <div class="why">Why this trade: ${why(p)}</div></div>`}).join(''):'<div class="card empty">No open positions</div>';
+ const today=s.date||'';const evs=ev.filter(e=>(e.ts_ist||'').startsWith(today)&&(showSkips?true:['ENTRY','SL_MOVE','EXIT'].includes(e.type))).reverse();
+ const K={ENTRY:'ENTRY',SL_MOVE:'SL MOVE',EXIT:'EXIT',SKIP:'SKIP',ERROR:'ERROR'};
+ const liveTag=e=>(e.live||e.mode==='LIVE')?' LIVE':'';
+ $('tl').innerHTML=evs.length?evs.map(e=>`<li class="${e.type==='SKIP'||e.type==='ERROR'?'skip':''}"><span class="t num">${esc(e.ts_ist.slice(11,16))}</span><span class="k">${K[e.type]||e.type}${liveTag(e)}${e.index?' · NIFTY':''}</span><span class="d">${evText(e)}</span></li>`).join(''):'<li class="mut" style="display:block">No trade events yet today</li>';
+ const ct=(s.closed_trades||[]).slice().reverse();$('closedWrap').style.display=ct.length?'block':'none';
+ if(ct.length)$('closed').innerHTML=`<table><tr><th>Contract</th><th class="r">Qty</th><th class="r">Entry</th><th class="r">Exit</th><th class="r">P&amp;L</th><th>Time</th><th>Exit</th></tr>${ct.map(z=>`<tr><td class="num">${esc(z.symbol.replace('NSE:',''))}</td><td class="r num">${z.qty}</td><td class="r num">${n(z.entry)}</td><td class="r num">${n(z.exit)}</td><td class="r num ${cl(z.pnl)}">${sg(z.pnl)}</td><td class="num mut">${esc(z.entry_ts.slice(11,16))}–${esc(z.exit_ts.slice(11,16))}</td><td class="mut">${esc((z.exit_reason||'').split(':')[0])}</td></tr>`).join('')}</table>`;
+ $('curve').innerHTML=curve(s.capital_curve);
+ const hist=s.history||[], days=s.daily_summary||[], cum=s.cumulative_pnl, hw=hist.filter(z=>(z.pnl_net||0)>0).length;
+ $('histStats').innerHTML=`<div class="card stat"><div class="lbl">Cumulative P&amp;L</div><div class="v num ${cl(cum)}">${sg(cum)}</div><div class="s">net of charges, all days</div></div>
+  <div class="card stat"><div class="lbl">Closed trades</div><div class="v num">${hist.length||0}</div><div class="s">${hw} win${hw===1?'':'s'} · ${(days||[]).length} day${(days||[]).length===1?'':'s'}</div></div>
+  <div class="card stat"><div class="lbl">Win rate</div><div class="v num">${hist.length?n(hw/hist.length*100,0)+'%':'–'}</div><div class="s">${hw} of ${hist.length||0}</div></div>
+  <div class="card stat"><div class="lbl">Best day</div><div class="v num ${cl((days||[]).reduce((b,d)=>d.pnl_net> (b||{pnl_net:-Infinity}).pnl_net?d:b,null)?.pnl_net)}">${(()=>{const b=(days||[]).reduce((m,d)=>d.pnl_net>(m||{pnl_net:-Infinity}).pnl_net?d:m,null);return b?sg(b.pnl_net):'–'})()}</div><div class="s num">${(()=>{const b=(days||[]).reduce((m,d)=>d.pnl_net>(m||{pnl_net:-Infinity}).pnl_net?d:m,null);return b?b.date:'–'})()}</div></div>`;
+ $('histDays').innerHTML=days.length?`<table><tr><th>Date</th><th class="r">Trades</th><th class="r">Wins</th><th class="r">Net P&amp;L</th></tr>${days.slice().reverse().map(d=>`<tr><td class="num">${esc(d.date)}</td><td class="r num">${d.trades}</td><td class="r num">${d.wins}</td><td class="r num ${cl(d.pnl_net)}">${sg(d.pnl_net)}</td></tr>`).join('')}</table>`:'<div class="empty" style="padding:16px">No daily summaries yet</div>';
+ $('hist').innerHTML=hist.length?`<table><tr><th>Date</th><th>Contract</th><th>Side</th><th class="r">Lots</th><th class="r">Entry</th><th class="r">Exit</th><th class="r">Gross</th><th class="r">Charges</th><th class="r">Net P&amp;L</th><th>Time IST</th><th>Exit</th></tr>${hist.slice().reverse().map(z=>`<tr><td class="num">${esc(z.date||'')}</td><td class="num">${esc((z.symbol||'').replace('NSE:',''))}</td><td>${esc(z.side||'')}</td><td class="r num">${z.lots!=null?z.lots+(z.lots===1?' lot':' lots')+(z.qty?` <span class="mut">(${z.qty})</span>`:''): (z.qty??'–')}</td><td class="r num">${n(z.entry)}</td><td class="r num">${n(z.exit)}</td><td class="r num ${cl(z.pnl_gross)}">${sg(z.pnl_gross)}</td><td class="r num mut">${rs(z.charges)}</td><td class="r num ${cl(z.pnl_net)}">${sg(z.pnl_net)}</td><td class="num mut">${esc((z.entry_ts||'').slice(11,16))}–${esc((z.exit_ts||'').slice(11,16))}</td><td class="mut">${esc((z.exit_reason||'').split(':')[0])}</td></tr>`).join('')}</table>`:'<div class="empty">No closed trades yet</div>';
+ if($('det').open||!$('details').innerHTML){const P=s.picked||{};let h=`<div class="card rules"><div class="lbl" style="margin-bottom:8px">Rules</div>
+  <div><b>Stop-loss:</b> starts at entry −30%. At +15% it moves to break-even (entry). After that it trails <b>15 percentage points of entry below the peak gain</b> (SL = peak − 0.15 × entry): +30% → SL +15%, +40% → +25%, +80% → +65%. It is never lowered; exit when LTP ≤ SL.</div>
+  <div><b>Sizing:</b> ₹30,000 paper capital, max ₹12,000 premium per new trade (whole lots, steps up to 3 strikes OTM to fit), nearest expiry.</div>
+  <div><b>Guards:</b> Nifty only (Bank Nifty off). No entries after 14:45 IST, square-off 15:15 IST, 20-min cooldown after every exit, max 4 entries/day, ₹3,600 daily loss cap (realised + open). Mode from config (<code>paper</code> default).</div></div>`;
+  for(const k of ['NIFTY']){const ss=(s.strategy_scores||{})[k]||[],p=P[k];h+=`<div class="card"><div class="lbl" style="margin-bottom:8px">Nifty 50 strategies ${p?`· pick: <span style="color:var(--txt)">${esc(p.name)} → ${p.dir}</span>, confidence ${p.confidence} (needs ${p.threshold})`:''}</div>
+   <table><tr><th>Strategy</th><th>Bias</th><th class="r">Score</th><th>Read</th></tr>${ss.map(z=>`<tr><td>${esc(z.name)}</td><td class="mut">${z.dir>0?'Bullish':z.dir<0?'Bearish':'Neutral'}</td><td class="r num">${z.score}</td><td class="wrapcell">${esc(z.why)}</td></tr>`).join('')}</table></div>`}
+  h+=`<div class="card"><div class="lbl" style="margin-bottom:8px">News sentiment</div>${Object.entries(s.news||{}).map(([k,v])=>`<div style="margin-bottom:10px"><span>${k}</span> <span class="mut num">${v.score>0?'+':''}${v.score} · ${v.n} headlines · ${esc((v.at||'').slice(11,16))} IST</span>${(v.headlines||[]).slice(0,4).map(x=>`<div class="mut" style="font-size:13px">· ${esc(x.title)}</div>`).join('')}</div>`).join('')||'<span class="mut">–</span>'}</div>`;
+  h+=`<div class="card"><div class="lbl" style="margin-bottom:8px">Raw event log</div><table><tr><th>Time IST</th><th>Type</th><th>Symbol</th><th>Reason</th></tr>${ev.slice().reverse().map(e=>`<tr><td class="num mut">${esc(e.ts_ist.slice(5))}</td><td>${e.type}</td><td class="num">${esc((e.symbol||e.index||'').replace('NSE:',''))}</td><td class="wrapcell">${esc(e.reason)}</td></tr>`).join('')}</table></div>`;
+  $('details').innerHTML=h}}
+$('det').addEventListener('toggle',()=>last&&render(last));
+async function tick(){try{const r=await fetch('/api/state?t='+Date.now(),{cache:'no-store'});render(await r.json())}catch(e){console.error(e);paintStatus()}}
+tick();setInterval(tick,15000);
+</script></body></html>
