@@ -14,7 +14,7 @@ html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 Inter,-ap
 a{color:var(--acc);text-decoration:none}
 
 /* top bar */
-.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:20px;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.2px}
 .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--acc),#8b5cf6);display:grid;place-items:center}
@@ -32,7 +32,7 @@ a{color:var(--acc);text-decoration:none}
 .iconbtn{background:var(--panel);border:1px solid var(--line);color:var(--mut);border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer}
 .iconbtn:hover{color:var(--txt)}
 
-.banner{display:none;margin:18px 0 0;padding:12px 16px;border-radius:10px;font-size:13px;background:var(--sl-soft);color:var(--txt);border:1px solid color-mix(in srgb,var(--sl) 35%,transparent)}
+.banner{display:none;margin:18px 0 0;padding:12px 16px;border-radius:10px;font-size:13px;background:var(--sl-soft);color:var(--txt);border:1px solid var(--line);border:1px solid color-mix(in srgb,var(--sl) 35%,transparent)}
 .banner.stale{background:var(--dn-soft);border-color:color-mix(in srgb,var(--dn) 35%,transparent)}
 
 /* layout */
@@ -150,7 +150,7 @@ footer{margin-top:40px;font-size:12px;color:var(--dim);text-align:center}
 </div></div>
 
 <div class="wrap">
-<div class="banner" id="banner"></div>
+<div class="banner" id="banner"></div><div id="errbox" style="display:none;white-space:pre-wrap;margin-top:12px;padding:12px 16px;border-radius:10px;background:#fde8e8;color:#9b1c1c;font:12px/1.5 monospace"></div>
 
 <section class="grid g-kpi">
  <div class="card kpi"><div class="lbl">Equity</div><div class="v num" id="eq">–</div><div class="s" id="eqs"></div><div class="spark" id="spark"></div></div>
@@ -183,6 +183,7 @@ footer{margin-top:40px;font-size:12px;color:var(--dim);text-align:center}
 <footer>Refreshes every 15 s · all times IST</footer>
 </div>
 
+<script>window.__errs=[];window.onerror=function(m,src,l,c){var t='Page error: '+m+' (line '+l+':'+c+')';window.__errs.push(t);var b=document.getElementById('errbox');if(b){b.style.display='block';b.textContent=window.__errs.join('\n')}};</script>
 <script>
 const $=id=>document.getElementById(id);
 const n=(x,d=2)=>x==null||isNaN(x)?'–':Number(x).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -294,7 +295,8 @@ function evRow(e){const k={ENTRY:['BUY','var(--up)'],SL_MOVE:['SL','var(--sl)'],
  else d=esc(e.reason||'');
  return `<li class="${e.type==='SKIP'?'skip':''}"><span class="t num">${hm(e.ts_ist)}</span><span class="nd"><i style="background:${k[1]}"></i></span><span class="d"><span class="k" style="color:${k[1]}">${k[0]}${e.live||e.mode==='LIVE'?'':' · PAPER'}</span>${d}</span></li>`}
 
-function render(j){last=j;const s=j.state||{},ev=j.events||[],R=s.rules||{};
+function render(j){try{renderInner(j)}catch(e){console.error(e);window.onerror(e.message,'',0,0)}}
+function renderInner(j){last=j;const s=j.state||{},ev=j.events||[],R=s.rules||{};
  const base=s.capital_start||30000,eq=s.equity,day=(s.realized_pnl||0)-(s.charges||0)+(s.unrealized_pnl||0);
  const md=(s.mode||'PAPER').toUpperCase();$('mode').textContent=md;$('mode').className='badge '+(md==='LIVE'?'live':'paper');
  paintStatus();
